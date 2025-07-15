@@ -1,0 +1,133 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f7fa;
+  margin: 0;
+  padding: 0 20px 40px;
+  color: #333;
+}
+
+.explore-section {
+  max-width: 1200px;
+  margin: 40px auto;
+  text-align: center;
+}
+
+.explore-section h1 {
+  font-size: 2.8rem;
+  margin-bottom: 10px;
+}
+
+.explore-section p {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 40px;
+}
+
+.explore-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.explore-card {
+  display: block;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 15px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+  transition: box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.explore-card:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  color: #000;
+}
+
+.explore-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.explore-card h3 {
+  font-size: 1.5rem;
+  margin: 0 0 10px;
+}
+
+.explore-card p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+.back-button-container {
+  max-width: 1200px;
+  margin: 30px auto 50px;
+  text-align: center;
+}
+
+.back-button {
+  text-decoration: none;
+  font-size: 1rem;
+  color: #007BFF;
+  border: 1px solid #007BFF;
+  padding: 8px 20px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #007BFF;
+  color: white;
+  cursor: pointer;
+}
+
+footer {
+  text-align: center;
+  padding: 20px 0;
+  border-top: 1px solid #ddd;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+/* Styles for individual detail pages */
+header {
+  max-width: 900px;
+  margin: 30px auto 15px;
+  padding: 0 15px;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+header nav a {
+  text-decoration: none;
+  color: #007BFF;
+  font-weight: 600;
+}
+
+header nav a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+main {
+  max-width: 900px;
+  margin: 0 auto 40px;
+  padding: 0 15px;
+  font-size: 1.1rem;
+  color: #444;
+}
+
+main img {
+  margin-bottom: 20px;
+}
+
