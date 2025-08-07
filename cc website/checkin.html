@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Bookings</title>
+   <link rel="stylesheet" href="checkin_style.css" />
+</head>
+<body>
+  <div class="checkin-container">
+    <h1>Your Booking History</h1>
+    <div class="booking-list" id="bookingList">
+      <p>Loading your bookings...</p>
+    </div>
+    <button id="backToHomeBtn" class="btn">Back to Home</button>
+  </div>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", async () => {
+      const user = JSON.parse(localStorage.getItem("loggedInUser"));
+      const bookingListDiv = document.getElementById("bookingList");
+
+      if (!user || !user.email) {
+
+        window.location.href = "/login.html";
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:3000/user-bookings?email=${encodeURIComponent(user.email)}`);
+        if (!response.ok) {
+          if (response.status === 404) {
+            bookingListDiv.innerHTML = "<p>You have no past bookings.</p>";
+          } else {
+            throw new Error("Failed to load booking info.");
+          }
+        } else {
+          const bookings = await response.json();
+          if (bookings.length > 0) {
+            bookingListDiv.innerHTML = ''; 
+            bookings.forEach(booking => {
+              const bookingCard = document.createElement('div');
+              bookingCard.classList.add('booking-card');
+              bookingCard.innerHTML = `
+                <p><strong>Name:</strong> ${booking.name || 'N/A'}</p>
+                <p><strong>Email:</strong> ${booking.email || 'N/A'}</p>
+                <p><strong>Room Type:</strong> ${booking.room || 'N/A'}</p>
+                <p><strong>Check-in Date:</strong> ${booking.checkin ? new Date(booking.checkin).toLocaleDateString() : 'N/A'}</p>
+                <p><strong>Check-out Date:</strong> ${booking.checkout ? new Date(booking.checkout).toLocaleDateString() : 'N/A'}</p>
+                <p><strong>Guests:</strong> ${booking.guests || 'N/A'}</p>
+                <p><strong>Special Requests:</strong> ${booking.requests || 'None'}</p>
+                <p><strong>Booked On:</strong> ${new Date(booking.created_at).toLocaleString() || 'N/A'}</p>
+              `;
+              bookingListDiv.appendChild(bookingCard);
+            });
+          } else {
+            bookingListDiv.innerHTML = "<p>You have no past bookings.</p>";
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+        bookingListDiv.innerHTML = `<p>❌ Error loading your bookings: ${error.message}</p>`;
+      }
+    });
+
+    document.getElementById("backToHomeBtn").addEventListener("click", () => {
+      
+      window.location.href = "/index.html";
+    });
+  </script>
+</body>
+</html>

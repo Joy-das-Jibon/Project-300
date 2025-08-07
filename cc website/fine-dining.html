@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fine Dining | Hotel Oasis</title>
+  <link href="Style_Explore.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+   
+    .detail-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+  
+    .hero-banner {
+      width: 100%;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .hero-image {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+    }
+    
+   
+    .description-section h2 {
+      color: #2c3e50;
+      font-size: 28px;
+      margin-bottom: 15px;
+    }
+    .description-section p {
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    
+  
+    .amenities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin: 30px 0;
+    }
+    .amenity-item {
+      background: #f9f9f9;
+      padding: 25px;
+      border-radius: 8px;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid #eee;
+    }
+    .amenity-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .amenity-icon {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      margin-bottom: 15px;
+    }
+    
+   
+    .gallery-section {
+      margin: 40px 0;
+    }
+    .gallery-trigger {
+      background: #e82574;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 16px;
+    }
+    .gallery-trigger:hover {
+      background: #1a252f;
+      transform: translateY(-2px);
+    }
+    .gallery-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    
+  
+    .back-to-explore {
+      display: block;
+      width: max-content;
+      margin: 40px auto;
+      padding: 12px 25px;
+      background: #e82574;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .back-to-explore:hover {
+      background: #1a252f;
+      transform: translateY(-2px);
+    }
+    
+    
+    .fine-dining .amenity-item:hover {
+      border-color: #c19a6b;
+    }
+    .fine-dining .gallery-trigger:hover {
+      background: #8b5a2b;
+    }
+  </style>
+</head>
+<body class="fine-dining">
+  <main class="detail-container">
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+      <img src="assets/dining-main.jpg" alt="Fine Dining at Hotel Oasis" class="hero-image">
+    </section>
+
+    <!-- Description Section -->
+    <section class="description-section">
+      <h2>Gourmet Experiences</h2>
+      <p>Our award-winning restaurants showcase world-class culinary talent with menus celebrating local ingredients and global flavors. From sunrise breakfasts to midnight cocktails, every dining experience is memorable.</p>
+      <p>Highlights include our Michelin-starred chef's tasting menu, rooftop cocktail bar, and 24-hour in-room dining with gourmet selections.</p>
+    </section>
+
+    <!-- Amenities Grid -->
+    <section class="amenities-section">
+      <h2>Dining Options</h2>
+      <div class="amenities-grid">
+        <div class="amenity-item">
+          <img src="assets/icons/restaurant.jpg" alt="Fine Dining" class="amenity-icon">
+          <h3>Horizon Restaurant</h3>
+          <p>Farm-to-table fine dining with seasonal tasting menus</p>
+        </div>
+        <div class="amenity-item">
+          <img src="assets/icons/bar.jpg" alt="Cocktail Bar" class="amenity-icon">
+          <h3>Sky Lounge</h3>
+          <p>Rooftop cocktails with panoramic city views</p>
+        </div>
+        <div class="amenity-item">
+          <img src="assets/icons/chef.jpg" alt="Chef" class="amenity-icon">
+          <h3>Chef's Table</h3>
+          <p>Exclusive 10-course tasting menu experience</p>
+        </div>
+        <div class="amenity-item">
+          <img src="assets/icons/room-service.jpg" alt="Room Service" class="amenity-icon">
+          <h3>24-Hour Dining</h3>
+          <p>Gourmet in-room service anytime</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery-section">
+      <h2>Dining Gallery</h2>
+      <button class="gallery-trigger" onclick="openGallery()">View Dining Gallery</button>
+      
+      <div class="gallery-overlay" id="galleryOverlay">
+        <div class="gallery-container">
+          <span class="close-gallery" onclick="closeGallery()">&times;</span>
+          <img src="assets/dining-1.jpg" alt="Restaurant" class="gallery-main-img" id="mainImage">
+          <div class="gallery-nav">
+            <button onclick="prevImage()">&#10094;</button>
+            <button onclick="nextImage()">&#10095;</button>
+          </div>
+          <div class="gallery-thumbnails">
+            <img src="assets/dining-1.jpg" alt="Main Dining Room" class="gallery-thumbnail active" onclick="changeImage(0)">
+            <img src="assets/dining-2.jpg" alt="Chef's Table" class="gallery-thumbnail" onclick="changeImage(1)">
+            <img src="assets/dining-3.jpg" alt="Rooftop Bar" class="gallery-thumbnail" onclick="changeImage(2)">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Back to Explore Button -->
+    <a href="Explore.html" class="back-to-explore">← Back to Explore</a>
+  </main>
+
+  <script>
+    
+    const diningImages = [
+      { src: "assets/dining-1.jpg", alt: "Main Dining Room" },
+      { src: "assets/dining-2.jpg", alt: "Chef's Table" },
+      { src: "assets/dining-3.jpg", alt: "Rooftop Bar" }
+    ];
+    let currentImageIndex = 0;
+
+    function openGallery() {
+      document.getElementById('galleryOverlay').style.display = 'flex';
+      updateMainImage();
+    }
+
+    function closeGallery() {
+      document.getElementById('galleryOverlay').style.display = 'none';
+    }
+
+    function updateMainImage() {
+      const mainImg = document.getElementById('mainImage');
+      mainImg.src = diningImages[currentImageIndex].src;
+      mainImg.alt = diningImages[currentImageIndex].alt;
+      
+      document.querySelectorAll('.gallery-thumbnail').forEach((thumb, index) => {
+        thumb.classList.toggle('active', index === currentImageIndex);
+      });
+    }
+
+    function changeImage(index) {
+      currentImageIndex = index;
+      updateMainImage();
+    }
+
+    function prevImage() {
+      currentImageIndex = (currentImageIndex - 1 + diningImages.length) % diningImages.length;
+      updateMainImage();
+    }
+
+    function nextImage() {
+      currentImageIndex = (currentImageIndex + 1) % diningImages.length;
+      updateMainImage();
+    }
+
+    document.getElementById('galleryOverlay').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeGallery();
+      }
+    });
+  </script>
+</body>
+</html>

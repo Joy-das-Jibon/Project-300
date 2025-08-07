@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Form</title>
+  <link rel="stylesheet" href="Style_contact.css">
+  <style>
+    /* Styles for the success message box */
+    .message-box {
+      display: none; /* Hidden by default */
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #d4edda; /* Light green for success */
+      color: #155724; /* Dark green text */
+      border: 1px solid #c3e6cb;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      z-index: 1001; /* Above other content */
+      text-align: center;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    .message-box.error {
+      background-color: #f8d7da; /* Light red for error */
+      color: #721c24; /* Dark red text */
+      border: 1px solid #f5c6cb;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Contact Us</h1>
+    <form id="contactForm" action="/contact" method="POST">
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+      <label for="email">Email Address:</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+      <label for="phone">Phone Number:</label>
+      <input type="tel" id="phone" name="phone" placeholder="Enter phone number" required>
+
+      <label for="checkin">Check-in Date:</label>
+      <input type="date" id="checkin" name="checkin" required>
+
+      <label for="checkout">Check-out Date:</label>
+      <input type="date" id="checkout" name="checkout"  required>
+
+      <label for="guests">Number of Guests:</label>
+      <input type="number" id="guests" name="guests" min="1" placeholder="Press No of guests" required>
+
+      <label for="room">Room Type:</label>
+      <select id="room" name="room">
+        <option value="single">Single</option>
+        <option value="double">Double</option>
+        <option value="deluxe">Deluxe</option>
+        <option value="suite">Suite</option>
+      </select>
+
+      <label for="requests">Special Requests:</label>
+      <textarea id="requests" name="requests" rows="5" placeholder="Any special requests or comments?"></textarea>
+
+      <button type="submit">Submit Booking</button>
+    </form>
+    <br>
+    <div class="back-button-container">
+      <a href="About.html" class="back-button">← Back to About</a>
+    </div>
+  </div>
+
+  <!-- Message Box HTML -->
+  <div id="messageBox" class="message-box"></div>
+
+  <script>
+    // Get the form elements and message box
+    const contactForm = document.getElementById('contactForm');
+    const messageBox = document.getElementById('messageBox');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+
+    // Function to display messages
+    function showMessage(message, isError = false) {
+      messageBox.textContent = message;
+      messageBox.classList.remove('error'); // Remove error class if present
+      if (isError) {
+        messageBox.classList.add('error'); // Add error class for error messages
+      }
+      messageBox.style.display = 'block'; // Show the message box
+    }
+
+    // Function to hide messages
+    function hideMessage() {
+      messageBox.style.display = 'none'; // Hide the message box
+    }
+
+    // --- New functionality: Pre-fill form fields ---
+    document.addEventListener('DOMContentLoaded', () => {
+      const userName = localStorage.getItem('userName');
+      const userEmail = localStorage.getItem('userEmail');
+
+      if (userName) {
+        nameInput.value = userName;
+      }
+      if (userEmail) {
+        emailInput.value = userEmail;
+      }
+    });
+    // --- End new functionality ---
+
+    // Add an event listener for the form submission
+    contactForm.addEventListener('submit', async (event) => {
+      // Prevent the default form submission behavior
+      event.preventDefault();
+
+      // Hide any previous messages
+      hideMessage();
+
+      // Collect form data
+      const formData = new FormData(contactForm);
+      const data = {};
+      for (const [key, value] of formData.entries()) {
+        data[key] = value;
+      }
+
+      try {
+        // Send the form data to your backend
+        const response = await fetch('http://localhost:3000/contact', { // Ensure this matches your backend endpoint
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        // Check if the request was successful
+        if (response.ok) {
+          // If successful, show success message
+          showMessage('Data stored successfully! Redirecting...', false);
+          // Then redirect to index.html after a short delay
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 2000); // 2-second delay
+        } else {
+          // If there was an error, parse the error message and display it
+          const errorData = await response.json();
+          console.error('Form submission failed:', errorData.message);
+          showMessage('Failed to submit booking: ' + errorData.message, true);
+        }
+      } catch (error) {
+        console.error('Network error or unexpected issue:', error);
+        showMessage('An unexpected error occurred. Please try again.', true);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spa & Wellness | Hotel Oasis</title>
+  <link href="Style_Explore.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    /* Main Container */
+    .detail-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    /* Hero Image */
+    .hero-banner {
+      width: 100%;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .hero-image {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+    }
+    
+    /* Gallery Styles */
+    .gallery-section {
+      margin: 40px 0;
+    }
+    .gallery-trigger {
+      background: #e82574;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 16px;
+    }
+    .gallery-trigger:hover {
+      background: #e82574;
+      transform: translateY(-2px);
+    }
+    .gallery-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .gallery-container {
+      width: 90%;
+      max-width: 1000px;
+      position: relative;
+    }
+    .gallery-main-img {
+      width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
+    }
+    .close-gallery {
+      position: absolute;
+      top: -50px;
+      right: 0;
+      color: white;
+      font-size: 36px;
+      cursor: pointer;
+    }
+    .gallery-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      padding: 0 20px;
+    }
+    .gallery-nav button {
+      background: rgba(255,255,255,0.3);
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .gallery-thumbnails {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .gallery-thumbnail {
+      width: 80px;
+      height: 60px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    .gallery-thumbnail.active {
+      border-color: #f39c12;
+    }
+
+    /* Back Button */
+    .back-to-explore {
+      display: block;
+      width: max-content;
+      margin: 40px auto;
+      padding: 12px 25px;
+      background: #e82574;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .back-to-explore:hover {
+      background: #1a252f;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body class="spa-wellness">
+  <main class="detail-container">
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+      <img src="assets/spa-main.jpg" alt="Spa at Hotel Oasis" class="hero-image">
+    </section>
+
+    <section class="description-section">
+      <h2>Serenity Spa & Wellness</h2>
+      <p>Our 5,000 sq ft wellness center offers holistic treatments blending ancient techniques with modern therapies. Featuring 12 treatment rooms, hydrotherapy pools, and a state-of-the-art fitness center.</p>
+      <p>Signature experiences include hot stone massages, aromatherapy journeys, and customized facial treatments using organic products.</p>
+    </section>
+
+    <section class="amenities-section">
+      <h2>Wellness Features</h2>
+      <div class="amenities-grid">
+        <div class="amenity-item">
+          <img src="assets/icons/massage.jpg" alt="Massage" class="amenity-icon">
+          <h3>Signature Treatments</h3>
+          <p>Customized massages and facials</p>
+        </div>
+        <div class="amenity-item">
+          <img src="assets/icons/sauna.jpg" alt="Sauna" class="amenity-icon">
+          <h3>Thermal Suite</h3>
+          <p>Sauna, steam room, and ice fountain</p>
+        </div>
+        <div class="amenity-item">
+          <img src="assets/icons/yoga.jpg" alt="Yoga" class="amenity-icon">
+          <h3>Yoga Studio</h3>
+          <p>Daily group and private sessions</p>
+        </div>
+        <div class="amenity-item">
+          <img src="assets/icons/hydrotherapy.jpg" alt="Hydrotherapy" class="amenity-icon">
+          <h3>Hydrotherapy</h3>
+          <p>Heated pools with massage jets</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Spa Gallery Section -->
+    <section class="gallery-section">
+      <h2>Spa Gallery</h2>
+      <button class="gallery-trigger" onclick="openGallery()">View Spa Gallery</button>
+      
+      <div class="gallery-overlay" id="galleryOverlay">
+        <div class="gallery-container">
+          <span class="close-gallery" onclick="closeGallery()">&times;</span>
+          <img src="assets/spa-1.jpg" alt="Spa Facility" class="gallery-main-img" id="mainImage">
+          <div class="gallery-nav">
+            <button onclick="prevImage()">&#10094;</button>
+            <button onclick="nextImage()">&#10095;</button>
+          </div>
+          <div class="gallery-thumbnails">
+            <img src="assets/spa-2.jpg" alt="Treatment Room" class="gallery-thumbnail active" onclick="changeImage(0)">
+            <img src="assets/spa-3.jpg" alt="Relaxation Area" class="gallery-thumbnail" onclick="changeImage(1)">
+            <img src="assets/spa-4.jpg" alt="Hydrotherapy Pool" class="gallery-thumbnail" onclick="changeImage(2)">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Back to Explore Button -->
+    <a href="Explore.html" class="back-to-explore">← Back to Explore</a>
+  </main>
+
+  <script>
+    // Gallery Functionality
+    const spaImages = [
+      { src: "assets/spa-2.jpg", alt: "Treatment Room" },
+      { src: "assets/spa-3.jpg", alt: "Relaxation Area" },
+      { src: "assets/spa-4.jpg", alt: "Hydrotherapy Pool" }
+    ];
+    let currentImageIndex = 0;
+
+    function openGallery() {
+      document.getElementById('galleryOverlay').style.display = 'flex';
+      updateMainImage();
+    }
+
+    function closeGallery() {
+      document.getElementById('galleryOverlay').style.display = 'none';
+    }
+
+    function updateMainImage() {
+      const mainImg = document.getElementById('mainImage');
+      mainImg.src = spaImages[currentImageIndex].src;
+      mainImg.alt = spaImages[currentImageIndex].alt;
+      
+      // Update active thumbnail
+      document.querySelectorAll('.gallery-thumbnail').forEach((thumb, index) => {
+        thumb.classList.toggle('active', index === currentImageIndex);
+      });
+    }
+
+    function changeImage(index) {
+      currentImageIndex = index;
+      updateMainImage();
+    }
+
+    function prevImage() {
+      currentImageIndex = (currentImageIndex - 1 + spaImages.length) % spaImages.length;
+      updateMainImage();
+    }
+
+    function nextImage() {
+      currentImageIndex = (currentImageIndex + 1) % spaImages.length;
+      updateMainImage();
+    }
+
+    // Close gallery when clicking outside image
+    document.getElementById('galleryOverlay').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeGallery();
+      }
+    });
+  </script>
+</body>
+</html>

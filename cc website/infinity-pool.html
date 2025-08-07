@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infinity Pool | Hotel Oasis</title>
+  <link href="Style_Explore.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+   
+    .hero-banner {
+      width: 100%;
+      margin-bottom: 30px;
+    }
+    .hero-image {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    
+   
+    .gallery-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    
+    /* Unified Button Styles */
+    .gallery-trigger, .back-button {
+      background: #e82574;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 16px;
+      display: inline-block;
+      text-decoration: none;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .gallery-trigger:hover, .back-button:hover {
+      background: #c41c60;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    
+    /* Button Containers */
+    .gallery-section {
+      margin: 40px 0;
+      text-align: center;
+    }
+    .back-button-container {
+      text-align: center;
+      margin: 30px 0;
+    }
+  </style>
+</head>
+<body class="infinity-pool">
+  <main class="detail-container">
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+      <img src="assets/pool-main.jpg" alt="Infinity Pool at Hotel Oasis" class="hero-image">
+    </section>
+
+    <section class="description-section">
+      <h2>Skyline Infinity Pool</h2>
+      <p>Experience the breathtaking views from our rooftop infinity pool that blends seamlessly with the horizon. Open daily from 6 AM to 10 PM, our temperature-controlled pool offers the perfect retreat.</p>
+      <p>Enjoy poolside service with refreshing cocktails and light meals while lounging in our premium cabanas. The infinity edge creates the illusion of swimming right into the city skyline.</p>
+    </section>
+
+    <section class="amenities-section">
+      <h2>Pool Features</h2>
+      <div class="amenities-grid">
+        <div class="amenity-item">
+          <img src="assets/icons/infinity.jpg" alt="Infinity Edge" class="amenity-icon">
+          <h3>Infinity Edge</h3>
+          <p>Seamless horizon views with our signature vanishing edge design</p>
+        </div>
+        <div class="amenity-item">
+          <img src="assets/icons/cabana.jpg" alt="Pool Cabanas" class="amenity-icon">
+          <h3>Private Cabanas</h3>
+          <p>Reservable daybeds with butler service</p>
+        </div>
+        <div class="amenity-item">
+          <img src="assets/icons/towel.jpg" alt="Pool Service" class="amenity-icon">
+          <h3>Poolside Service</h3>
+          <p>Food & beverage service at your lounge</p>
+        </div>
+        <div class="amenity-item">
+          <img src="assets/icons/temperature.jpg" alt="Temperature Control" class="amenity-icon">
+          <h3>Temperature Control</h3>
+          <p>Perfectly heated for year-round swimming</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="gallery-section">
+      <h2>Gallery</h2>
+      <button class="gallery-trigger" onclick="openGallery()">View Pool Gallery</button>
+      
+      <div class="gallery-overlay" id="galleryOverlay">
+        <div class="gallery-container">
+          <span class="close-gallery" onclick="closeGallery()">&times;</span>
+          <img src="assets/pool-1.jpg" alt="Infinity Pool" class="gallery-main-img" id="mainImage">
+          <div class="gallery-nav">
+            <button onclick="prevImage()">&#10094;</button>
+            <button onclick="nextImage()">&#10095;</button>
+          </div>
+          <div class="gallery-thumbnails">
+            <img src="assets/pool-2.jpg" alt="Day View" class="gallery-thumbnail active" onclick="changeImage(0)">
+            <img src="assets/pool-3.jpg" alt="Night View" class="gallery-thumbnail" onclick="changeImage(1)">
+            <img src="assets/pool-4.jpg" alt="Cabanas" class="gallery-thumbnail" onclick="changeImage(2)">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="back-button-container">
+      <a href="Explore.html" class="back-button">← Back to Explore</a>
+    </div>
+  </main>
+
+  <script>
+    // Gallery functionality
+    const images = [
+      { src: "assets/pool-2.jpg", alt: "Day View" },
+      { src: "assets/pool-3.jpg", alt: "Night View" },
+      { src: "assets/pool-4.jpg", alt: "Cabanas" }
+    ];
+    
+    let currentImageIndex = 0;
+    
+    function openGallery() {
+      document.getElementById('galleryOverlay').style.display = 'flex';
+      updateMainImage();
+    }
+    
+    function closeGallery() {
+      document.getElementById('galleryOverlay').style.display = 'none';
+    }
+    
+    function updateMainImage() {
+      const mainImg = document.getElementById('mainImage');
+      mainImg.src = images[currentImageIndex].src;
+      mainImg.alt = images[currentImageIndex].alt;
+      
+      // Update active thumbnail
+      document.querySelectorAll('.gallery-thumbnail').forEach((thumb, index) => {
+        thumb.classList.toggle('active', index === currentImageIndex);
+      });
+    }
+    
+    function changeImage(index) {
+      currentImageIndex = index;
+      updateMainImage();
+    }
+    
+    function prevImage() {
+      currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+      updateMainImage();
+    }
+    
+    function nextImage() {
+      currentImageIndex = (currentImageIndex + 1) % images.length;
+      updateMainImage();
+    }
+    
+    // Close gallery when clicking outside image
+    document.getElementById('galleryOverlay').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeGallery();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hotel Oasis | Home</title>
+    <link href="styles.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet" />
+  </head>
+  <body>
+    <header class="header">
+      <nav>
+        <div class="nav__bar">
+          <div class="logo">
+            <a href="#"><img src="assets/logo.png" alt="logo" /></a>
+          </div>
+          <div class="nav__menu__btn" id="menu-btn">
+            <i class="ri-menu-line"></i>
+          </div>
+        </div>
+        <ul class="nav__links" id="nav-links">
+          
+          <li><a href="About.html">About</a></li>
+          <li><a href="Services.html">Services</a></li>
+          <li><a href="Explore.html">Explore</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <!-- User Info and Logout Button -->
+        <div id="user-info" style="display: none; gap: 10px; align-items: center; margin-left: auto; padding-right: 20px;">
+          <span id="user-email" style="color: var(--primary-color); font-weight: bold;"></span>
+          <button class="btn nav__btn" id="logout-btn">Logout</button>
+        </div>
+        <a href="About.html#bottom"><button class="btn nav__btn">Book Now</button></a>
+      </nav>
+
+      <div class="section__container header__container">
+        <p class="section__subheader">Simple. Quick. Affordable.</p>
+        <h1>The Best Holidays Start Here!</h1>
+      </div>
+
+          <!-- Section for Check In/Check Out buttons -->
+    <section class="section__container booking__section">
+      <div class="booking__form booking__buttons_layout">
+        <button class="btn booking__btn" onclick="handleBooking('checkin')">CHECK IN</button>
+        <button class="btn booking__btn" onclick="handleBooking('checkout')">CHECK OUT</button>
+      </div>
+    </section>
+    </header>
+    <section class="section__container banner__container">
+      <div class="banner__content">
+        <div class="banner__card">
+          <h4>25+</h4>
+          <p>Properties Available</p>
+        </div>
+        <div class="banner__card">
+          <h4>350+</h4>
+          <p>Bookings Completed</p>
+        </div>
+        <div class="banner__card">
+          <h4>600+</h4>
+          <p>Happy Customers</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer" id="contact">
+      <div class="section__container footer__container">
+        <div class="footer__col">
+          <div class="logo">
+            <a href="#home"><img src="assets/logo.png" alt="logo" /></a>
+          </div>
+          <p class="section__description">
+            Discover a world of comfort, luxury, and adventure as you explore our curated selection of hotels.
+          </p>
+           <a href="About.html#bottom"><button class="btn nav__btn">Book Now</button></a>
+        </div>
+        <div class="footer__col">
+          <h4>QUICK LINKS</h4>
+          <ul class="footer__links">
+            <li><a href="#">Browse Destinations</a></li>
+            <li><a href="#">Special Offers & Packages</a></li>
+            <li><a href="#">Room Types & Amenities</a></li>
+            <li><a href="#">Customer Reviews</a></li>
+            <li><a href="#">Travel Tips</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>OUR SERVICES</h4>
+          <ul class="footer__links">
+            <li><a href="#">Concierge Assistance</a></li>
+            <li><a href="#">Flexible Booking</a></li>
+            <li><a href="#">Airport Transfers</a></li>
+            <li><a href="#">Wellness & Recreation</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>CONTACT US</h4>
+          <ul class="footer__links">
+            <li><a href="#">Phone:01714567987</a>
+            <a href="#">hoteloasis@info.com</a></li>
+          </ul>
+          <div class="footer__socials">
+            <a href="https://www.facebook.com/"><img src="assets/facebook.png" alt="facebook" /></a>
+            <a href="https://www.instagram.com/"><img src="assets/instagram.png" alt="instagram" /></a>
+            <a href="https://www.youtube.com/"><img src="assets/youtube.png" alt="youtube" /></a>
+            <a href="https://x.com/"><img src="assets/twitter.png" alt="twitter" /></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bar">.</div>
+      <h2>📍 Our Location</h2>
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3618.056705900802!2d91.97044227465098!3d24.930138077883857!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3750552bc71c899d%3A0x804e438bcc32b390!2sSylhet%20Metropolitan%20University!5e0!3m2!1sen!2sbd!4v1752326546322!5m2!1sen!2sbd"
+        width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"
+      ></iframe>
+    </footer>
+
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const loggedInUser = localStorage.getItem("loggedInUser");
+        const userInfo = document.getElementById("user-info");
+        const userEmailDisplay = document.getElementById("user-email");
+        const logoutBtn = document.getElementById("logout-btn");
+
+        if (loggedInUser) {
+          const user = JSON.parse(loggedInUser);
+          userInfo.style.display = "flex";
+          userEmailDisplay.textContent = user.email;
+
+          // Store user's name and email in localStorage for Contact Us form
+          // Ensure user.name exists and is the actual name, not email
+          if (user.name) {
+              localStorage.setItem('userName', user.name); 
+          } else {
+              // Fallback if name is not provided by backend, or if it's the email
+              // You might want to log a warning here if user.name is expected
+              localStorage.setItem('userName', user.email); // As a temporary fallback, still use email if name is missing
+          }
+          localStorage.setItem('userEmail', user.email);
+        } else {
+          userInfo.style.display = "none";
+          // Clear localStorage items if no user is logged in
+          localStorage.removeItem('userName');
+          localStorage.removeItem('userEmail');
+        }
+
+        logoutBtn.addEventListener("click", () => {
+          localStorage.removeItem("loggedInUser");
+          localStorage.removeItem('userName'); // Clear name on logout
+          localStorage.removeItem('userEmail'); // Clear email on logout
+          // Replaced alert with a custom message box for better UX
+          showMessage("Logged out successfully!", false); 
+          setTimeout(() => {
+            location.reload();
+          }, 1500); // Reload after 1.5 seconds
+        });
+      });
+
+      // Booking buttons handler
+      function handleBooking(action) {
+        const user = JSON.parse(localStorage.getItem("loggedInUser"));
+        const userEmail = user?.email;
+
+        if (!userEmail) {
+          // Replaced alert with a custom message box for better UX
+          showMessage("Please login first to proceed.", true); 
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 1500); // Redirect after 1.5 seconds
+          return;
+        }
+
+        if (action === "checkin") {
+          window.location.href = "checkin.html";
+        } else if (action === "checkout") 
+        {
+          localStorage.removeItem("loggedInUser");
+          localStorage.removeItem('userName'); // Clear name on checkout
+          localStorage.removeItem('userEmail'); // Clear email on checkout
+          // Replaced alert with a custom message box for better UX
+          showMessage("Checked Out successfully!", false); 
+          setTimeout(() => {
+            location.reload();
+          }, 1500); // Reload after 1.5 seconds
+        }
+      }
+
+      // --- Message Box Functions (Copied from Contact.html for consistency) ---
+      // This ensures messages can be displayed on index.html as well
+      const messageBox = document.createElement('div');
+      messageBox.id = 'messageBox';
+      messageBox.className = 'message-box';
+      document.body.appendChild(messageBox);
+
+      function showMessage(message, isError = false) {
+        messageBox.textContent = message;
+        messageBox.classList.remove('error');
+        if (isError) {
+          messageBox.classList.add('error');
+        }
+        messageBox.style.display = 'block';
+        // Automatically hide after a few seconds if it's not an error that requires user action
+        if (!isError) {
+          setTimeout(() => {
+            hideMessage();
+          }, 2000); // Hide after 2 seconds
+        }
+      }
+
+      function hideMessage() {
+        messageBox.style.display = 'none';
+      }
+      // --- End Message Box Functions ---
+    </script>
+    <style>
+      /* Styles for the message box (copied from Contact.html for consistency) */
+      .message-box {
+        display: none; /* Hidden by default */
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #d4edda; /* Light green for success */
+        color: #155724; /* Dark green text */
+        border: 1px solid #c3e6cb;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 1001; /* Above other content */
+        text-align: center;
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+      .message-box.error {
+        background-color: #f8d7da; /* Light red for error */
+        color: #721c24; /* Dark red text */
+        border: 1px solid #f5c6cb;
+      }
+    </style>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | Hotel Oasis</title>
+  <link rel="stylesheet" href="login.css" />
+</head>
+<body>
+  <div class="login-container">
+    <h1>Login to Your Account</h1>
+    <form id="loginForm">
+      <label for="email">Email Address:</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+      <button type="submit">Login</button>
+    </form>
+    <p id="message" style="color: red;"></p>
+    <p>Don't have an account? <a href="register.html" style="color: green;">Register here</a></p>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const messageElem = document.getElementById('message');
+      messageElem.textContent = '';
+
+      try {
+        const response = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email, password })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          messageElem.style.color = 'green';
+          messageElem.textContent = '✅ Login successful! Redirecting...';
+
+          // Correctly access user.name and user.email from the backend response
+          // The backend sends: { message: "Login successful", user: { email: ..., name: ... } }
+          const userLoggedIn = {
+            email: result.user.email,
+            name: result.user.name // Correctly get the name from result.user.name
+          };
+          
+          // Store the full user object in 'loggedInUser'
+          localStorage.setItem('loggedInUser', JSON.stringify(userLoggedIn));
+
+          // Also store 'userName' and 'userEmail' directly for the Contact Us form
+          localStorage.setItem('userName', userLoggedIn.name);
+          localStorage.setItem('userEmail', userLoggedIn.email);
+
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 2000);
+        } else {
+          messageElem.style.color = 'red';
+          messageElem.textContent = result.error || '❌ Login failed';
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        messageElem.style.color = 'red';
+        messageElem.textContent = '❌ Error: Server not responding.';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luxury Rooms | Hotel Oasis</title>
+  <link href="Style_Explore.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    /* Added inline styles for the button changes */
+    .gallery-trigger, .back-button {
+      background-color: #e82574;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .gallery-trigger:hover, .back-button:hover {
+      background-color: #d01a66;
+    }
+  </style>
+</head>
+<body class="luxury-room">
+  <!-- Main Content Section -->
+  <main class="detail-container">
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+      <img src="assets/room-1.jpg" alt="Luxury Room at Hotel Oasis" class="hero-image">
+    </section>
+
+    <!-- Description Section -->
+    <section class="description-section">
+      <h2>Your Personal Sanctuary</h2>
+      <p>Our luxury rooms blend contemporary design with timeless elegance, offering a serene retreat after your day's adventures. Each spacious room features floor-to-ceiling windows with breathtaking views, a king-sized bed with premium linens, and a marble-appointed bathroom with rainfall shower.</p>
+      
+      <p>Modern amenities include smart climate control, high-speed WiFi, 55" smart TV with streaming services, Nespresso machine, and a well-stocked minibar. Turndown service and 24-hour room service ensure your comfort at all times.</p>
+    </section>
+
+    <!-- Amenities Grid -->
+    <section class="amenities-section">
+      <h2>Room Amenities</h2>
+      <div class="amenities-grid">
+        <div class="amenity-item">
+          <img src="assets/icons/wifi.jpg" alt="High-Speed WiFi" class="amenity-icon">
+          <h3>High-Speed WiFi</h3>
+          <p>Complimentary high-speed internet access throughout your stay</p>
+        </div>
+        <div class="amenity-item">
+          <img src="assets/icons/bed.jpg" alt="Premium Bedding" class="amenity-icon">
+          <h3>Premium Bedding</h3>
+          <p>Plush king-size bed with luxury linens for perfect sleep</p>
+        </div>
+        <div class="amenity-item">
+          <img src="assets/icons/coffee.jpg" alt="Nespresso Machine" class="amenity-icon">
+          <h3>Nespresso Machine</h3>
+          <p>In-room coffee maker with premium coffee selections</p>
+        </div>
+        <div class="amenity-item">
+          <img src="assets/icons/bath.jpg" alt="Luxury Bathroom" class="amenity-icon">
+          <h3>Luxury Bathroom</h3>
+          <p>Marble bathroom with rainfall shower and premium toiletries</p>
+        </div>
+        <div class="amenity-item">
+          <img src="assets/icons/tv.jpg" alt="Smart TV" class="amenity-icon">
+          <h3>Smart TV</h3>
+          <p>55" 4K TV with streaming services and cable channels</p>
+        </div>
+        <div class="amenity-item">
+          <img src="assets/icons/minibar.jpg" alt="Minibar" class="amenity-icon">
+          <h3>Minibar</h3>
+          <p>Well-stocked with premium beverages and snacks</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery-section">
+      <h2>Gallery</h2>
+      <button class="gallery-trigger" onclick="openGallery()">View Room Gallery</button>
+      
+      <!-- Gallery Overlay (hidden by default) -->
+      <div class="gallery-overlay" id="galleryOverlay">
+        <div class="gallery-container">
+          <span class="close-gallery" onclick="closeGallery()">&times;</span>
+          <img src="assets/room-1.jpg" alt="Luxury Room" class="gallery-main-img" id="mainImage">
+          <div class="gallery-nav">
+            <button onclick="prevImage()">&#10094;</button>
+            <button onclick="nextImage()">&#10095;</button>
+          </div>
+          <div class="gallery-thumbnails">
+            <img src="assets/room-1.jpg" alt="Room View" class="gallery-thumbnail active" onclick="changeImage(0)">
+            <img src="assets/room-2.jpg" alt="Bed Area" class="gallery-thumbnail" onclick="changeImage(1)">
+            <img src="assets/room-3.jpg" alt="Bathroom" class="gallery-thumbnail" onclick="changeImage(2)">
+            <img src="assets/room-4.jpg" alt="Room Service" class="gallery-thumbnail" onclick="changeImage(3)">
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Back Button -->
+  <div class="back-button-container">
+    <a href="Explore.html" class="back-button">← Back to Explore</a>
+  </div>
+
+  <script>
+    // Gallery functionality
+    const images = [
+      { src: "assets/room-1.jpg", alt: "Luxury Room" },
+      { src: "assets/room-2.jpg", alt: "Bed Area" },
+      { src: "assets/room-3.jpg", alt: "Bathroom" },
+      { src: "assets/room-4.jpg", alt: "Room Service" }
+    ];
+    
+    let currentImageIndex = 0;
+    
+    function openGallery() {
+      document.getElementById('galleryOverlay').style.display = 'flex';
+      updateMainImage();
+    }
+    
+    function closeGallery() {
+      document.getElementById('galleryOverlay').style.display = 'none';
+    }
+    
+    function updateMainImage() {
+      const mainImg = document.getElementById('mainImage');
+      mainImg.src = images[currentImageIndex].src;
+      mainImg.alt = images[currentImageIndex].alt;
+      
+      // Update active thumbnail
+      document.querySelectorAll('.gallery-thumbnail').forEach((thumb, index) => {
+        thumb.classList.toggle('active', index === currentImageIndex);
+      });
+    }
+    
+    function changeImage(index) {
+      currentImageIndex = index;
+      updateMainImage();
+    }
+    
+    function prevImage() {
+      currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+      updateMainImage();
+    }
+    
+    function nextImage() {
+      currentImageIndex = (currentImageIndex + 1) % images.length;
+      updateMainImage();
+    }
+    
+    // Close gallery when clicking outside image
+    document.getElementById('galleryOverlay').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeGallery();
+      }
+    });
+  </script>
+</body>
+</html>
