@@ -1,15 +1,17 @@
 const express = require("express");
-const mysql = require("mysql");
+const mysql = require("mysql2"); // use mysql2 for better compatibility
 const cors = require("cors");
 const path = require("path");
+require("dotenv").config(); // read .env file
 
 const app = express();
-const port = 3000;
+const port = process.env.APP_PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Update the frontend path
 const frontendPath = path.join(__dirname, "../Project-300-main2/Project-300-main2/Project-300-main/Project-300-main/cc website");
 app.use(express.static(frontendPath));
 
@@ -17,19 +19,20 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
 
-// MySQL connection
+// MySQL connection (AlwaysData)
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "12345",
-  database: "hotel_db",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT,
 });
 
 db.connect((err) => {
   if (err) {
     console.error("Database connection failed:", err);
   } else {
-    console.log("Connected to MySQL database");
+    console.log("Connected to AlwaysData MySQL database!");
   }
 });
 
@@ -66,16 +69,14 @@ app.post("/login", (req, res) => {
       return res.status(500).json({ error: "Login failed" });
     }
     if (results.length > 0) {
-      
-      res.status(200).json({ message: "Login successful", user: { email: results[0].email, name: results[0].name } });
+      res.status(200).json({ message: "Login successful", name: results[0].name });
     } else {
-      
       res.status(401).json({ error: "Invalid email or password" });
     }
   });
 });
 
-// Contact Form Submission / Booking
+// Booking / Contact Form
 app.post("/contact", (req, res) => {
   const { name, email, phone, checkin, checkout, guests, room, requests } = req.body;
 
@@ -93,13 +94,10 @@ app.post("/contact", (req, res) => {
   });
 });
 
-// Fetch ALL bookings for a user by email
+// Fetch all bookings for a user
 app.get("/user-bookings", (req, res) => {
   const email = req.query.email;
-
-  if (!email) {
-    return res.status(400).json({ message: "Email query parameter is required" });
-  }
+  if (!email) return res.status(400).json({ message: "Email query parameter is required" });
 
   const sql = `
     SELECT name, email, room, checkin, checkout, guests, requests, created_at
@@ -113,37 +111,28 @@ app.get("/user-bookings", (req, res) => {
       console.error("Fetch user bookings error:", err);
       return res.status(500).json({ message: "Failed to fetch booking info" });
     }
-    if (results.length === 0) {
-      return res.status(404).json({ message: "No bookings found for this email." });
-    }
+    if (results.length === 0) return res.status(404).json({ message: "No bookings found" });
     res.status(200).json(results);
   });
 });
 
-// Delete booking by email (for checkout functionality)
+// Checkout (delete bookings)
 app.delete("/checkout", (req, res) => {
-    const { email } = req.body;
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ message: "Email is required for checkout." });
 
-    if (!email) {
-        return res.status(400).json({ message: "Email is required for checkout." });
+  const sql = "DELETE FROM contacts WHERE email = ?";
+  db.query(sql, [email], (err, result) => {
+    if (err) {
+      console.error("Checkout error:", err);
+      return res.status(500).json({ message: "Checkout failed." });
     }
-
-  
-    const sql = "DELETE FROM contacts WHERE email = ?";
-
-    db.query(sql, [email], (err, result) => {
-        if (err) {
-            console.                error("Checkout error:", err);
-            return res.status(500).json({ message: "Checkout failed." });
-        }
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ message: "No active bookings found for this email." });
-        }
-        res.status(200).json({ message: "Checkout successful. All bookings for this email have been removed." });
-    });
+    if (result.affectedRows === 0) return res.status(404).json({ message: "No active bookings found" });
+    res.status(200).json({ message: "Checkout successful" });
+  });
 });
-
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
