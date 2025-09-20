@@ -1,8 +1,8 @@
 const express = require("express");
-const mysql = require("mysql2"); // mysql2 works better on Render
+const mysql = require("mysql2");
 const cors = require("cors");
 const path = require("path");
-require("dotenv").config(); // load .env
+require("dotenv").config();
 
 const app = express();
 const port = process.env.APP_PORT || 3000;
@@ -14,12 +14,18 @@ app.use(express.urlencoded({ extended: true }));
 // ======================
 // FRONTEND PATH
 // ======================
-// Assuming "cc website" folder is in the repo root next to server.js
+// Make sure "cc website" is at the same level as server.js
 const frontendPath = path.join(__dirname, "cc website");
 app.use(express.static(frontendPath));
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(frontendPath, "index.html"));
+// Serve all HTML files correctly
+app.get("/:page?", (req, res) => {
+  const page = req.params.page || "index.html"; // default to index.html
+  res.sendFile(path.join(frontendPath, page), (err) => {
+    if (err) {
+      res.status(404).sendFile(path.join(frontendPath, "index.html")); // fallback to index
+    }
+  });
 });
 
 // ======================
@@ -47,17 +53,11 @@ db.connect((err) => {
 app.post("/register", (req, res) => {
   const { name, email, password } = req.body;
   db.query("SELECT * FROM users WHERE email = ?", [email], (err, results) => {
-    if (err) {
-      console.error("Database error:", err);
-      return res.status(500).json({ message: "Internal server error." });
-    }
+    if (err) return res.status(500).json({ message: "Internal server error." });
     if (results.length > 0) return res.status(409).json({ message: "User already exists." });
 
     db.query("INSERT INTO users (name, email, password) VALUES (?, ?, ?)", [name, email, password], (err) => {
-      if (err) {
-        console.error("Registration error:", err);
-        return res.status(500).json({ message: "Registration failed" });
-      }
+      if (err) return res.status(500).json({ message: "Registration failed" });
       res.status(200).json({ message: "Registration successful" });
     });
   });
@@ -69,10 +69,7 @@ app.post("/register", (req, res) => {
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
   db.query("SELECT * FROM users WHERE email = ? AND password = ?", [email, password], (err, results) => {
-    if (err) {
-      console.error("Login error:", err);
-      return res.status(500).json({ error: "Login failed" });
-    }
+    if (err) return res.status(500).json({ error: "Login failed" });
     if (results.length > 0) {
       res.status(200).json({ message: "Login successful", name: results[0].name });
     } else {
@@ -91,10 +88,7 @@ app.post("/contact", (req, res) => {
      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
     [name, email, phone, checkin, checkout, guests, room, requests],
     (err) => {
-      if (err) {
-        console.error("Booking error:", err);
-        return res.status(500).json({ message: "Booking failed" });
-      }
+      if (err) return res.status(500).json({ message: "Booking failed" });
       res.status(200).json({ message: "Booking successful" });
     }
   );
@@ -112,10 +106,7 @@ app.get("/user-bookings", (req, res) => {
      FROM contacts WHERE email = ? ORDER BY created_at DESC`,
     [email],
     (err, results) => {
-      if (err) {
-        console.error("Fetch bookings error:", err);
-        return res.status(500).json({ message: "Failed to fetch bookings" });
-      }
+      if (err) return res.status(500).json({ message: "Failed to fetch bookings" });
       if (results.length === 0) return res.status(404).json({ message: "No bookings found" });
       res.status(200).json(results);
     }
@@ -130,10 +121,7 @@ app.delete("/checkout", (req, res) => {
   if (!email) return res.status(400).json({ message: "Email is required" });
 
   db.query("DELETE FROM contacts WHERE email = ?", [email], (err, result) => {
-    if (err) {
-      console.error("Checkout error:", err);
-      return res.status(500).json({ message: "Checkout failed" });
-    }
+    if (err) return res.status(500).json({ message: "Checkout failed" });
     if (result.affectedRows === 0) return res.status(404).json({ message: "No active bookings found" });
     res.status(200).json({ message: "Checkout successful" });
   });
@@ -145,5 +133,3 @@ app.delete("/checkout", (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
-
-
