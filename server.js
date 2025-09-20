@@ -5,32 +5,33 @@ const path = require("path");
 require("dotenv").config();
 
 const app = express();
-const port = process.env.APP_PORT || 3000;
+const port = process.env.APP_PORT || 3006;
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve all static files from cc website folder
+// ========== FRONTEND PATH ==========
 const frontendPath = path.join(__dirname, "cc website");
 app.use(express.static(frontendPath));
 
-// For any GET request, serve the correct HTML if it exists
+// Serve all HTML pages
+app.get("/", (req, res) => {
+  res.sendFile(path.join(frontendPath, "index.html"));
+});
+
+// For all other HTML pages (contact.html, services.html, etc.)
 app.get("/:page", (req, res) => {
   const page = req.params.page;
   const filePath = path.join(frontendPath, page);
-  res.sendFile(filePath, (err) => {
+  res.sendFile(filePath, err => {
     if (err) {
       res.status(404).sendFile(path.join(frontendPath, "index.html"));
     }
   });
 });
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(frontendPath, "index.html"));
-});
-
-// ---------------- MySQL ----------------
+// ========== DATABASE CONNECTION ==========
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -39,26 +40,26 @@ const db = mysql.createConnection({
   port: process.env.DB_PORT,
 });
 
-db.connect((err) => {
+db.connect(err => {
   if (err) console.error("Database connection failed:", err);
   else console.log("Connected to AlwaysData MySQL database!");
 });
 
-// ---------------- Registration ----------------
+// ========== REGISTRATION ==========
 app.post("/register", (req, res) => {
   const { name, email, password } = req.body;
   db.query("SELECT * FROM users WHERE email = ?", [email], (err, results) => {
     if (err) return res.status(500).json({ message: "Internal server error." });
     if (results.length > 0) return res.status(409).json({ message: "User already exists." });
 
-    db.query("INSERT INTO users (name, email, password) VALUES (?, ?, ?)", [name, email, password], (err) => {
+    db.query("INSERT INTO users (name, email, password) VALUES (?, ?, ?)", [name, email, password], err => {
       if (err) return res.status(500).json({ message: "Registration failed" });
       res.status(200).json({ message: "Registration successful" });
     });
   });
 });
 
-// ---------------- Login ----------------
+// ========== LOGIN ==========
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
   db.query("SELECT * FROM users WHERE email = ? AND password = ?", [email, password], (err, results) => {
@@ -68,24 +69,27 @@ app.post("/login", (req, res) => {
   });
 });
 
-// ---------------- Booking / Contact ----------------
+// ========== BOOKING / CONTACT FORM ==========
 app.post("/contact", (req, res) => {
   const { name, email, phone, checkin, checkout, guests, room, requests } = req.body;
-  const sql = `INSERT INTO contacts (name,email,phone,checkin,checkout,guests,room,requests)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-  db.query(sql, [name, email, phone, checkin, checkout, guests, room, requests], (err) => {
-    if (err) return res.status(500).json({ message: "Booking failed" });
-    res.status(200).json({ message: "Booking successful" });
-  });
+  db.query(
+    `INSERT INTO contacts (name, email, phone, checkin, checkout, guests, room, requests)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    [name, email, phone, checkin, checkout, guests, room, requests],
+    err => {
+      if (err) return res.status(500).json({ message: "Booking failed" });
+      res.status(200).json({ message: "Booking successful" });
+    }
+  );
 });
 
-// ---------------- Fetch user bookings ----------------
+// ========== FETCH USER BOOKINGS ==========
 app.get("/user-bookings", (req, res) => {
   const email = req.query.email;
   if (!email) return res.status(400).json({ message: "Email is required" });
 
   db.query(
-    `SELECT name,email,room,checkin,checkout,guests,requests,created_at 
+    `SELECT name, email, room, checkin, checkout, guests, requests, created_at
      FROM contacts WHERE email = ? ORDER BY created_at DESC`,
     [email],
     (err, results) => {
@@ -96,7 +100,7 @@ app.get("/user-bookings", (req, res) => {
   );
 });
 
-// ---------------- Checkout ----------------
+// ========== CHECKOUT (DELETE BOOKINGS) ==========
 app.delete("/checkout", (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ message: "Email is required" });
@@ -108,7 +112,7 @@ app.delete("/checkout", (req, res) => {
   });
 });
 
-// ---------------- Start Server ----------------
+// ========== START SERVER ==========
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
