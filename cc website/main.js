@@ -1,34 +1,5 @@
-let menu = document.querySelector("#menu-icon");
-let navbar = document.querySelector(".navbar");
-
-if(menu) {
-  menu.onclick = () => {
-    navbar.classList.toggle("active");
-  };
-}
-
-window.onscroll = () => {
-  if(navbar) navbar.classList.remove("active");
-};
-
-
-if(typeof ScrollReveal !== "undefined") {
-  ScrollReveal({
-    reset: true,
-    distance: "60px",
-    duration: 2000,
-    delay: 200,
-  });
-
-  ScrollReveal().reveal(".home-text, .heading", { origin: "top" });
-  ScrollReveal().reveal(".home-img, .services-container, .explore-box, .contact form", { origin: "bottom" });
-  ScrollReveal().reveal(".home-text h1, .about-img", { origin: "left" });
-  ScrollReveal().reveal(".home-text p, .about-content", { origin: "right" });
-}
-
-
+// Booking form
 const contactForm = document.getElementById("contact-form");
-
 if (contactForm) {
   contactForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -45,32 +16,28 @@ if (contactForm) {
     };
 
     try {
-      const response = await fetch("http://localhost:3000/contact", {
+      const response = await fetch("/contact", { // changed from localhost
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       const result = await response.json();
-      if (response.ok) 
-      {
-        alert("✅ Booking successful!"); 
+      if (response.ok) {
+        alert("✅ Booking successful!");
         contactForm.reset();
-         
-      } 
-      else {
-        alert("❌ Booking failed: " + result.message); 
+      } else {
+        alert("❌ Booking failed: " + result.message);
       }
     } catch (error) {
       console.error("Booking error:", error);
-      alert("❌ An error occurred during booking."); 
+      alert("❌ An error occurred during booking.");
     }
   });
 }
 
-// ===== Registration Form Submission =====
+// Registration form
 const registerForm = document.getElementById("registerForm");
-
 if (registerForm) {
   registerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -80,7 +47,7 @@ if (registerForm) {
     const password = document.getElementById("password").value;
 
     try {
-      const response = await fetch("http://localhost:3000/register", {
+      const response = await fetch("/register", { // changed from localhost
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
@@ -88,24 +55,20 @@ if (registerForm) {
 
       const result = await response.json();
       if (response.ok) {
-        alert("✅ Registration successful! Redirecting to login..."); 
+        alert("✅ Registration successful! Redirecting to login...");
         window.location.href = "login.html";
       } else {
-        alert("❌ Registration failed: " + result.message); 
+        alert("❌ Registration failed: " + result.message);
       }
     } catch (error) {
       console.error("Registration error:", error);
-      alert("❌ An error occurred during registration."); 
+      alert("❌ An error occurred during registration.");
     }
   });
 }
 
-
-
-
-
+// Login form
 const loginForm = document.getElementById('loginForm');
-
 if (loginForm) {
   loginForm.addEventListener('submit', async function (e) {
     e.preventDefault();
@@ -116,7 +79,7 @@ if (loginForm) {
     messageElem.textContent = '';
 
     try {
-      const response = await fetch('/login', {
+      const response = await fetch('/login', { // changed from localhost
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -129,7 +92,6 @@ if (loginForm) {
         messageElem.style.color = 'green';
         messageElem.textContent = '✅ Login successful! Redirecting...';
 
-        
         localStorage.setItem('loggedInUser', JSON.stringify({ email: email, name: result.name || email }));
 
         setTimeout(() => {
@@ -146,3 +108,4 @@ if (loginForm) {
     }
   });
 }
+
