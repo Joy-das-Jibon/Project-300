@@ -1,3 +1,5 @@
+const API_BASE = "https://project-300-g7gu.onrender.com"; // your Render backend URL
+
 // Booking form
 const contactForm = document.getElementById("contact-form");
 if (contactForm) {
@@ -16,7 +18,7 @@ if (contactForm) {
     };
 
     try {
-      const response = await fetch("/contact", { // changed from localhost
+      const response = await fetch(`${API_BASE}/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -47,7 +49,7 @@ if (registerForm) {
     const password = document.getElementById("password").value;
 
     try {
-      const response = await fetch("/register", { // changed from localhost
+      const response = await fetch(`${API_BASE}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
@@ -79,7 +81,7 @@ if (loginForm) {
     messageElem.textContent = '';
 
     try {
-      const response = await fetch('/login', { // changed from localhost
+      const response = await fetch(`${API_BASE}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -108,4 +110,3 @@ if (loginForm) {
     }
   });
 }
-
