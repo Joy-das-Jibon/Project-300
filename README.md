@@ -48,5 +48,5 @@ Explore Page
 Login Page
 ![image alt](https://github.com/Joy-das-Jibon/Project-300/blob/main/Screenshot/Login_page.png?raw=true)
 
-![image alt](https://github.com/Joy-das-Jibon/Project-300/blob/main/Screenshot/Checkin_info.png?raw=true
+![image alt](https://github.com/Joy-das-Jibon/Project-300/blob/main/Screenshot/Checkin_info.png?raw=true)
 Check-in Info Page
