@@ -36,4 +36,6 @@ fetch('http://localhost:3000/contact', {
 });
 ```
 Homepage
-![image alt](https://github.com/Joy-das-Jibon/Project-300/blob/main/Screenshot/Homepage.png?raw=true)
+![image alt](https://github.com/Joy-das-Jibon/Project-300/blob/main/Screenshot/Homepage.png?raw=true)\
+ After Login Homepage
+ ![image alt](https://github.com/Joy-das-Jibon/Project-300/blob/main/Screenshot/Afterlogin_homepage.png?raw=true)
