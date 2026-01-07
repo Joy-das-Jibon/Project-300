@@ -51,3 +51,9 @@ Login Page
 
 ![image alt](https://github.com/Joy-das-Jibon/Project-300/blob/main/Screenshot/Checkin_info.png?raw=true)
 Check-in Info Page
+
+
+# Hotel Website Project
+
+This is a fully functional hotel website where users can explore the hotel through pages like Homepage, About, Services, and Explore. Users can register and log in, make bookings, and check in. After logging in, they can view all their check-in details. The frontend is built with HTML, CSS, and JavaScript, while the backend uses Node.js, Express, and MySQL to handle data and server operations.
+
